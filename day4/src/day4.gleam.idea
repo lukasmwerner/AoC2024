@@ -1,0 +1,29 @@
+
+pub type Pos {
+  Pos(i: Int, j: Int)
+}
+
+// thanks to Jak in the gleam discord for sharing this impl.
+pub type Grid =
+  dict.Dict(Pos, String)
+
+  let grid = {
+    use g, row, i <- list.index_fold(data |> string.split("\n"), dict.new())
+    use g, char, j <- list.index_fold(row |> string.to_graphemes, g)
+
+    g |> dict.insert(Pos(i, j), char)
+  }
+
+  let rows = data |> string.split("\n") |> list.length
+  let cols =
+    data
+    |> string.split("\n")
+    |> list.first
+    |> just_do_it
+    |> string.to_graphemes
+    |> list.length
+
+  io.debug(#(rows, cols))
+
+  grid |> dict.get(Pos(rows - 1, cols - 1)) |> io.debug
+

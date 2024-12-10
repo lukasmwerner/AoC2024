@@ -1,12 +1,13 @@
 import disp
 import gleam/int
+import gleam/io
 import gleam/list
 import gleam/string
 import glex
 import simplifile
 
 pub fn main() {
-  let assert Ok(code) = "input.txt" |> simplifile.read
+  let assert Ok(code) = "ex2.txt" |> simplifile.read
 
   let tokens =
     glex.new()
@@ -15,6 +16,8 @@ pub fn main() {
     |> glex.add_rule("mul", "mul\\(\\d{1,3},\\d{1,3}\\)")
     |> glex.build(code)
     |> glex.lex
+
+  tokens |> glex.valid_only |> list.each(io.debug)
 
   let program =
     tokens
